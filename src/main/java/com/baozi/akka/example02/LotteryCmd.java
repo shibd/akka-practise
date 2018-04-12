@@ -9,13 +9,9 @@ public class LotteryCmd extends Cmd{
 
     public String username;
 
-    public String email;
-
-
-    public LotteryCmd(Long userId, String username, String email) {
+    public LotteryCmd(Long userId, String username) {
         this.userId = userId;
         this.username = username;
-        this.email = email;
     }
 
     public LotteryCmd() {

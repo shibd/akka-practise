@@ -31,9 +31,7 @@ public class LotteryActory extends AbstractPersistentActor {
 
     private Event doLottery(LotteryCmd lc) {
         if (state.remainAmount > 0) {
-            System.out.println(state.remainAmount);
             int luckyMonery = new Random().nextInt(state.remainAmount) + 1;
-            System.out.println(luckyMonery);
             return new LuckyEvent(lc.userId, luckyMonery);
         } else {
             return new FailureEvent(lc.userId, "下次早点来,红包已被抽完");
@@ -41,7 +39,7 @@ public class LotteryActory extends AbstractPersistentActor {
     }
 
     private void increaseEvtCountAndSnapshot() {
-        int snapShotInterval = 5;
+        int snapShotInterval = 2;
         if (lastSequenceNr() % snapShotInterval == 0 && lastSequenceNr() != 0) { //当有持久化5个事件后我们便存储一次当前Actor状态的快照
             //从新发送
             System.out.println("存够5个事件,发送存储快照命令");
@@ -52,10 +50,13 @@ public class LotteryActory extends AbstractPersistentActor {
     @Override
     public Receive createReceiveRecover() {
         return receiveBuilder()
-                .match(LuckyEvent.class, s -> updateState(s))
+                .match(LuckyEvent.class, s -> {
+                    updateState(s);
+                    System.out.println("从事件恢复状态<>用户" + s.userId + "之前抽了" + s.luckyMoney + "元红包,还剩余" + state.remainAmount + "元红包");
+                })
                 .match(SnapshotOffer.class, s -> {
                     Lottery lo = (Lottery) s.snapshot();
-                    System.out.println("从快照恢复数据,一共" + lo.totalAmount + "快,还剩余" + lo.remainAmount);
+                    System.out.println("从快照恢复数据<>一共" + lo.totalAmount + "快,还剩余" + lo.remainAmount);
                     state = lo;
                 })
                 .build();
@@ -98,7 +99,7 @@ public class LotteryActory extends AbstractPersistentActor {
 
     @Override
     public String persistenceId() {
-        return "actor-2";
+        return "actor-4";
     }
 
     public static void main(String[] args) throws Exception {
@@ -106,12 +107,12 @@ public class LotteryActory extends AbstractPersistentActor {
         Lottery lottery = new Lottery(10000, 10000);
         ActorSystem actorSystem = ActorSystem.create();
 
-        ActorRef actor = actorSystem.actorOf(Props.create(LotteryActory.class, lottery), "actor-2");
+        ActorRef actor = actorSystem.actorOf(Props.create(LotteryActory.class, lottery), "actor-4");
 
         ExecutorService pool = Executors.newFixedThreadPool(3);
 
-        for (int i = 0; i < 5; i++) {
-            pool.submit(new LotteryRun(actor, new LotteryCmd(Long.valueOf(i), "godpan", "xxx@gmail.com")));
+        for (int i = 0; i < 10; i++) {
+            pool.submit(new LotteryRun(actor, new LotteryCmd(Long.valueOf(i), "baozi")));
         }
         Thread.sleep(5000);
         pool.shutdown();

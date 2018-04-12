@@ -1,9 +1,11 @@
 package com.baozi.akka.example02;
 
+import java.io.Serializable;
+
 /**
  * Created by baozi on 2018/4/12.
  */
-public class Lottery {
+public class Lottery implements Serializable{
 
     /**
      * 红包总金额
