@@ -1,4 +1,4 @@
-package com.baozi.akka.example01;
+package com.baozi.akka.helloworld;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;

@@ -32,6 +32,12 @@
             <version>2.5.11</version>
         </dependency>
         <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-remote_2.12</artifactId>
+            <version>2.5.11</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.iq80.leveldb</groupId>
             <artifactId>leveldb</artifactId>
             <version>0.7</version>
@@ -41,11 +47,6 @@
             <artifactId>leveldbjni-all</artifactId>
             <version>1.8</version>
         </dependency>
-
-
-        <!--"com.typesafe.akka" %% "akka-persistence" % "2.5.8",-->
-        <!--"org.iq80.leveldb" % "leveldb" % "0.7",-->
-        <!--"org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8"-->
     </dependencies>
 
 </project>

@@ -1,4 +1,4 @@
-package com.baozi.akka.example02;
+package com.baozi.akka.persistence;
 
 /**
  * Created by baozi on 2018/4/12.

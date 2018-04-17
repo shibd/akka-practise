@@ -1,4 +1,4 @@
-package com.baozi.akka.example02;
+package com.baozi.akka.persistence;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.baozi.akka.example02;
+package com.baozi.akka.persistence;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -39,9 +39,9 @@ public class LotteryActory extends AbstractPersistentActor {
     }
 
     private void increaseEvtCountAndSnapshot() {
-        int snapShotInterval = 2;
+        int snapShotInterval = 5;
         if (lastSequenceNr() % snapShotInterval == 0 && lastSequenceNr() != 0) { //当有持久化5个事件后我们便存储一次当前Actor状态的快照
-            //从新发送
+            //从新发送命令
             System.out.println("存够5个事件,发送存储快照命令");
             getSelf().tell("saveSnapshot", null);
         }
@@ -71,17 +71,18 @@ public class LotteryActory extends AbstractPersistentActor {
                     Event event = doLottery(l);
                     if (event instanceof LuckyEvent) {
                         LuckyEvent luckyEvent = (LuckyEvent) event;
+                        // 状态更新一定要放在事件持久化之后做
                         persist(luckyEvent, e -> {
                             //更新状态
                             updateState(luckyEvent);
                             //快照存储
                             increaseEvtCountAndSnapshot();
-                            //发送成功事件
-//                            getSender().tell(null, null);
+                            //发送成功事件(可以做异步持久化,也可以做上游回应通知)
+                            getSender().tell(null, null);
                             System.out.println("恭喜用户" + luckyEvent.userId + "抽到了" + luckyEvent.luckyMoney + "元红包");
                         });
                     } else {
-                        //失败事件
+                        //失败事件(可以做上游回应通知)
                         System.out.println(((FailureEvent)event).reason);
 //                        getSender().tell(null, null);
                     }
@@ -104,15 +105,15 @@ public class LotteryActory extends AbstractPersistentActor {
 
     public static void main(String[] args) throws Exception {
 
-        Lottery lottery = new Lottery(10000, 10000);
+        Lottery lottery = new Lottery(100000, 100000);
         ActorSystem actorSystem = ActorSystem.create();
 
-        ActorRef actor = actorSystem.actorOf(Props.create(LotteryActory.class, lottery), "actor-4");
+        ActorRef actorRef = actorSystem.actorOf(Props.create(LotteryActory.class, lottery), "actor-4");
 
-        ExecutorService pool = Executors.newFixedThreadPool(3);
+        ExecutorService pool = Executors.newFixedThreadPool(10);
 
-        for (int i = 0; i < 10; i++) {
-            pool.submit(new LotteryRun(actor, new LotteryCmd(Long.valueOf(i), "baozi")));
+        for (int i = 0; i < 100; i++) {
+            pool.submit(new LotteryRun(actorRef, new LotteryCmd(Long.valueOf(i), "baozi")));
         }
         Thread.sleep(5000);
         pool.shutdown();
@@ -133,6 +134,7 @@ class LotteryRun implements Runnable {
 
     @Override
     public void run() {
+        //这里可以做同步等待吗
         actorRef.tell(lotteryCmd, null);
     }
 }

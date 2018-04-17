@@ -1,4 +1,4 @@
-package com.baozi.akka.example01;
+package com.baozi.akka.helloworld;
 
 /**
  * Created by baozi on 2018/4/11.
