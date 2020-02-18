@@ -1,4 +1,4 @@
-package com.baozi.akka.type.FireandForget;
+package com.baozi.akka.typed.FireandForget;
 
 import akka.actor.typed.ActorRef;
 import akka.actor.typed.ActorSystem;
