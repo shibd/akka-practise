@@ -1,11 +1,9 @@
 # maven ignore
 target/
 *.jar
-!.mvn/wrapper/*
 *.war
 *.zip
 *.tar
-*.tar.gz
 
 # eclipse ignore
 .settings/
@@ -19,6 +17,9 @@ target/
 *.iws
 
 # temp ignore
+log/
+logs/
+*.doc
 *.log
 *.cache
 *.diff
@@ -28,3 +29,6 @@ target/
 # system ignore
 .DS_Store
 Thumbs.db
+
+# h2 data
+*.db
