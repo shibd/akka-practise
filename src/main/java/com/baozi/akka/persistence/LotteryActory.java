@@ -103,22 +103,7 @@ public class LotteryActory extends AbstractPersistentActor {
         return "actor-4";
     }
 
-    public static void main(String[] args) throws Exception {
 
-        Lottery lottery = new Lottery(100000, 100000);
-        ActorSystem actorSystem = ActorSystem.create();
-
-        ActorRef actorRef = actorSystem.actorOf(Props.create(LotteryActory.class, lottery), "actor-4");
-
-        ExecutorService pool = Executors.newFixedThreadPool(10);
-
-        for (int i = 0; i < 100; i++) {
-            pool.submit(new LotteryRun(actorRef, new LotteryCmd(Long.valueOf(i), "baozi")));
-        }
-        Thread.sleep(5000);
-        pool.shutdown();
-        actorSystem.terminate();
-    }
 }
 
 class LotteryRun implements Runnable {

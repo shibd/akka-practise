@@ -9,8 +9,10 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <scala.version>2.13</scala.version>
-        <akka.version>2.6.3</akka.version>
+        <scala.version>2.12</scala.version>
+        <akka.version>2.5.23</akka.version>
+        <akka.http.version>10.1.9</akka.http.version>
+        <akka.cluster.bootstrap.version>1.0.3</akka.cluster.bootstrap.version>
     </properties>
 
 
@@ -22,7 +24,27 @@
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-actor-typed_${scala.version}</artifactId>
+            <artifactId>akka-cluster_${scala.version}</artifactId>
+            <version>${akka.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-cluster-sharding_${scala.version}</artifactId>
+            <version>${akka.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lightbend.akka.management</groupId>
+            <artifactId>akka-management-cluster-bootstrap_${scala.version}</artifactId>
+            <version>${akka.cluster.bootstrap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lightbend.akka.management</groupId>
+            <artifactId>akka-management-cluster-http_${scala.version}</artifactId>
+            <version>${akka.cluster.bootstrap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-slf4j_${scala.version}</artifactId>
             <version>${akka.version}</version>
         </dependency>
         <dependency>
@@ -30,21 +52,21 @@
             <artifactId>akka-persistence_${scala.version}</artifactId>
             <version>${akka.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-remote_${scala.version}</artifactId>
-            <version>${akka.version}</version>
-        </dependency>
+
+
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-testkit_${scala.version}</artifactId>
             <version>${akka.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-actor-testkit-typed_${scala.version}</artifactId>
             <version>${akka.version}</version>
+            <scope>test</scope>
         </dependency>
+
 
         <dependency>
             <groupId>org.slf4j</groupId>
