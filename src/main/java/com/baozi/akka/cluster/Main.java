@@ -31,7 +31,6 @@ public class Main {
             clusterPrintActor.tell("hello world" + i, ActorRef.noSender());
         }
 
-        actorSystem.terminate();
     }
 
 
